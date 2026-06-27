@@ -6,7 +6,7 @@ I built this mainly to get comfortable with the DOM on its own terms, before rea
 
 ## Demo
 
-![Sticky board screenshot](./Screenshot 2026-06-27 210756.png)
+![Sticky board screenshot](./Screenshot.png)
 
 ![Sticky board demo](./Animation.gif)
 
