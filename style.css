@@ -12,11 +12,28 @@ html,body{
 }
 
 :root{
-    --bg-color:#000;
+    /* Base surfaces - dark blue-grey scale. Darkest = furthest back, lightest = closest forward */
+    --bg-color: #12141c;
+    --column-bg: #1d2130;
     --primary-color: #d4d2d2;
-    --bg-button-color: rgb(8, 243, 204);
-    --delete-color: rgba(29, 232, 184, 0.797);
 
+    /* Accent / action colors */
+    --bg-button-color: rgb(8, 243, 204);
+    --delete-color: #ff6b6b; /* red signals "destructive", kept out of the cyan CTA family on purpose */
+
+    /* Sticky note colors - yellow sits roughly opposite blue on the color wheel, so it pops hard against the cool background */
+    --sticky-color: #ffe066;
+    --sticky-color-alt: #ffd93d;
+    --sticky-text: #3a2e0f;
+
+    /* Workflow accents - cool (not started) -> warm (active) -> green (done) */
+    --accent-todo: #5dade2;
+    --accent-progress: #f5b041;
+    --accent-done: #58d68d;
+
+    /* Inputs - need a light surface so dark text is actually readable */
+    --input-bg: #f4f1ea;
+    --input-text: #1d2130;
 
     /* Padding Variables*/
     --nav-padding: 15px 30px;
@@ -51,6 +68,7 @@ nav{
     display: flex;
     align-items: center;
     justify-content: space-between;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06); /* separates header from the board below */
 }
 
 nav button{
@@ -79,7 +97,7 @@ section{
 section .task-column{
     padding: var(--padding-m);
     flex-grow: 1;
-    background-color: rgb(38, 38, 38);
+    background-color: var(--column-bg);
     border-radius: var(--border-radius-m);
     display: flex;
     flex-direction: column;
@@ -91,6 +109,11 @@ section .task-column.hover-over {
     transform: scale(1.05);
 }
 
+/* each column gets a thin stripe matching its place in the workflow */
+#Todo{ border-top: 3px solid var(--accent-todo); }
+#Progress{ border-top: 3px solid var(--accent-progress); }
+#Done{ border-top: 3px solid var(--accent-done); }
+
 section .task-column .heading{
     width: 100%;
     display: flex;
@@ -99,24 +122,56 @@ section .task-column .heading{
 }
 
 section .task-column .Task{
-    background-color: rgb(23, 18, 34);
+    background-color: var(--sticky-color);
+    color: var(--sticky-text);
     padding: var(--padding-m);
-    border-radius: var(--border-radius-m);
+    border-radius: var(--border-radius-s);
     display: flex;
     flex-direction: column;
     gap: var(--padding-s);
     cursor: grab;
+    box-shadow: 3px 5px 10px rgba(0, 0, 0, 0.35);
+    transform: rotate(-1deg);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 
+}
+
+/* alternating shade + tilt so the notes look scattered, not printed */
+section .task-column .Task:nth-child(even){
+    background-color: var(--sticky-color-alt);
+    transform: rotate(1deg);
+}
+
+section .task-column .Task:hover{
+    transform: rotate(0deg) scale(1.02);
+    box-shadow: 4px 8px 16px rgba(0, 0, 0, 0.45);
+}
+
+section .task-column .Task:active{
+    cursor: grabbing;
+}
+
+section .task-column .Task h2{
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+section .task-column .Task p{
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: rgba(58, 46, 15, 0.75); /* a touch lighter than the heading - keeps the title as the focal point */
 }
 
 section .task-column .Delete{
     align-self: flex-end;
     cursor: pointer;
-    padding: var(--padding-m);
+    padding: var(--padding-s) var(--padding-m);
     border-radius: var(--border-radius-m);
     border: none;
     outline: none;
     background-color: var(--delete-color);
+    color: #fff;
+    font-weight: 600;
     
 }
 
@@ -146,7 +201,8 @@ section .task-column .Delete{
 
 .modal .centre{
     background-color: var(--bg-button-color);
-    padding: var(--padding-m);
+    color: var(--input-text);
+    padding: var(--padding-l);
     border-radius: var(--border-radius-m);
     display: flex;
     flex-direction: column;
@@ -157,10 +213,10 @@ section .task-column .Delete{
 
 .modal .centre input , .modal .centre textarea, .modal .centre select{
 
-    background-color: var(red);
+    background-color: var(--input-bg);
     border: none;
     outline: none;
-    color: var(blue);
+    color: var(--input-text);
     padding: var(--padding-m);
     border-radius: var(--border-radius-m);
 }
